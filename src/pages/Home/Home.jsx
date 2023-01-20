@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchTrendingMovies } from 'services/Movies.services';
+import { TrendingMoviesList } from 'components/TrendingMoviesList/TrendingMoviesList';
 
 export const Home = () => {
   const [movies, setMovies] = useState([]);
@@ -12,21 +13,15 @@ export const Home = () => {
     getMovies();
   }, []);
   const onResolve = data => {
-    const moviesName = data.map(({ id, original_title }) => ({
+    const movieTitles = data.map(({ id, original_title }) => ({
       id,
       original_title,
     }));
-    setMovies(moviesName);
+    setMovies(movieTitles);
   };
   return (
     <div>
-      <ul>
-        {movies.map(({ id, original_title }) => (
-          <li key={id}>
-            <p>{original_title}</p>
-          </li>
-        ))}
-      </ul>
+      <TrendingMoviesList movies={movies} />
     </div>
   );
 };

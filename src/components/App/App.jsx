@@ -1,22 +1,21 @@
-import { Routes, Route, Link } from 'react-router-dom';
-import { Home } from 'pages/Home';
-
-import css from './App.module.css';
+import { Routes, Route } from 'react-router-dom';
+import { Layout } from 'components/Layout/Layout';
+import { Home } from 'pages/Home/Home';
+import { Movies } from 'pages/Movies/Movies';
+import { MovieDetails } from 'pages/MovieDetails/MovieDetails';
+import { Cast } from 'pages/MovieDetails/CastList/CastList';
 
 export const App = () => {
   return (
-    <div>
-      <header className={css.header}>
-        <nav>
-          <Link className={css.link} to="/">
-            Home
-          </Link>
-        </nav>
-      </header>
+    <Layout>
       <Routes>
-        <Route path="/" element={<Home />} />
-        {/* <Route path="*" element={<div>Not Found</div>} /> */}
+        <Route path="" element={<Home />} />
+        <Route path="movies/:movieId" element={<MovieDetails />}>
+          <Route path="cast" element={<Cast />} />
+          {/* <Route path="reviews" element={<Reviews />} /> */}
+        </Route>
+        <Route path="movies" element={<Movies />} />
       </Routes>
-    </div>
+    </Layout>
   );
 };

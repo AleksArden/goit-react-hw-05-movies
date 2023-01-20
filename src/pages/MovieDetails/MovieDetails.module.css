@@ -1,0 +1,12 @@
+.wrapper {
+  display: flex;
+  padding: 16px;
+}
+.poster {
+  width: 250px;
+  height: 375px;
+  object-fit: cover;
+}
+.content {
+  padding: 24px;
+}

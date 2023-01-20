@@ -1,14 +1,1 @@
-.header {
-  height: 100px;
-  display: flex;
-  align-items: center;
-  padding-left: 60px;
-  -webkit-box-shadow: 0 10px 6px -6px #777;
-  -moz-box-shadow: 0 10px 6px -6px #777;
-  box-shadow: 0 10px 6px -6px #777;
-}
-.link {
-  font-size: 28px;
-  text-decoration: none;
-  color: black;
-}
+
