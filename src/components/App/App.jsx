@@ -1,21 +1,27 @@
-import { Routes, Route } from 'react-router-dom';
-import { Layout } from 'components/Layout/Layout';
-import { Home } from 'pages/Home/Home';
-import { Movies } from 'pages/Movies/Movies';
-import { MovieDetails } from 'pages/MovieDetails/MovieDetails';
-import { Cast } from 'pages/MovieDetails/CastList/CastList';
+import { lazy } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Layout from 'components/Layout/Layout';
+import Cast from 'components/Cast/Cast';
+import Reviews from 'components/Reviews/Reviews';
+
+const HomePage = lazy(() => import('pages/HomePage/HomePage'));
+const MoviesPage = lazy(() => import('pages/MoviesPage/MoviesPage'));
+const MovieDetailsPage = lazy(() =>
+  import('pages/MovieDetailsPage/MovieDetailsPage')
+);
 
 export const App = () => {
   return (
-    <Layout>
-      <Routes>
-        <Route path="" element={<Home />} />
-        <Route path="movies/:movieId" element={<MovieDetails />}>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />} />
+        <Route path="movies/:movieId" element={<MovieDetailsPage />}>
           <Route path="cast" element={<Cast />} />
-          {/* <Route path="reviews" element={<Reviews />} /> */}
+          <Route path="reviews" element={<Reviews />} />
         </Route>
-        <Route path="movies" element={<Movies />} />
-      </Routes>
-    </Layout>
+        <Route path="movies" element={<MoviesPage />} />
+      </Route>
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 };

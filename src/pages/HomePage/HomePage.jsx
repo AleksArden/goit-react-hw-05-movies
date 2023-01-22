@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { fetchTrendingMovies } from 'services/Movies.services';
-import { TrendingMoviesList } from 'components/TrendingMoviesList/TrendingMoviesList';
+import TrendingMovies from 'components/TrendingMovies/TrendingMovies';
 
-export const Home = () => {
+const HomePage = () => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
@@ -15,13 +15,14 @@ export const Home = () => {
   const onResolve = data => {
     const movieTitles = data.map(({ id, original_title }) => ({
       id,
-      original_title,
+      title: original_title,
     }));
     setMovies(movieTitles);
   };
   return (
     <div>
-      <TrendingMoviesList movies={movies} />
+      <TrendingMovies movies={movies} />
     </div>
   );
 };
+export default HomePage;

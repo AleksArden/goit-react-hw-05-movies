@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { IMAGE_URL } from 'constans/ImageURL';
 import { fetchCastById } from 'services/Movies.services';
-import { CastItem } from '../CastItem/CastItem';
 
-export const Cast = () => {
+const Cast = () => {
   const [cast, setCast] = useState([]);
 
   const { movieId } = useParams();
@@ -29,8 +29,13 @@ export const Cast = () => {
   return (
     <ul>
       {cast.map(({ id, character, name, image }) => (
-        <CastItem key={id} name={name} character={character} image={image} />
+        <li key={id}>
+          {image && <img src={`${IMAGE_URL}` + image} alt={name} width="150" />}
+          <p>{name}</p>
+          <p>Character: {character}</p>
+        </li>
       ))}
     </ul>
   );
 };
+export default Cast;
