@@ -15,9 +15,12 @@ import {
   Button,
 } from './MovieDetailsPage.styled';
 import { IMAGE_URL } from 'constans/ImageURL';
+import { STATUS } from 'constans/Status';
+import imageReplace from 'assets/poster/poster-not-found.jpg';
 
 const MovieDetailsPage = () => {
   const [movie, setMovie] = useState(null);
+  const [status, setStatus] = useState(STATUS.idle);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,8 +28,14 @@ const MovieDetailsPage = () => {
 
   useEffect(() => {
     const getMovie = async query => {
-      const data = await fetchMovieDetailsById(query);
-      onResolve(data);
+      setStatus(STATUS.loading);
+      try {
+        const data = await fetchMovieDetailsById(query);
+        onResolve(data);
+      } catch (error) {
+        console.log(error);
+        setStatus(STATUS.error);
+      }
     };
     getMovie(movieId);
   }, [movieId]);
@@ -40,48 +49,65 @@ const MovieDetailsPage = () => {
       voteAverage: (data.vote_average * 10).toFixed(0),
     };
     setMovie(dataMovie);
+    setStatus(STATUS.success);
   };
-  if (!movie) return null;
-
-  const { title, releaseDate, overview, genres, poster, voteAverage } = movie;
   return (
     <>
-      <Button type="button" onClick={() => navigate(location?.state?.from)}>
-        Go back
-      </Button>
-      <Wrapper>
-        {Poster && (
-          <Poster src={`${IMAGE_URL}` + poster} alt={`Poster ${title}`} />
-        )}
-        <Content>
-          <h2>
-            {title} ({releaseDate})
-          </h2>
-          <p>User score {voteAverage}%</p>
-          <b>Overview</b>
-          <p>{overview}</p>
-          <b>Genres</b>
-          <p>{genres}</p>
-        </Content>
-      </Wrapper>
-      <Thumb>
-        <p>Additional information</p>
-        <ul>
-          <li>
-            <Link to="cast" state={location.state}>
-              Cast
-            </Link>
-          </li>
-          <li>
-            <Link to="reviews" state={location.state}>
-              Reviews
-            </Link>
-          </li>
-        </ul>
-      </Thumb>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Outlet />
-      </Suspense>
+      {status === STATUS.error && <h2>NOT FOUND</h2>}
+      {status === STATUS.loading && <p>Loading...</p>}
+      {status === STATUS.success && movie && (
+        <>
+          <Button type="button" onClick={() => navigate(location?.state?.from)}>
+            Go back
+          </Button>
+          <Wrapper>
+            {movie.poster ? (
+              <Poster
+                src={`${IMAGE_URL}` + movie.poster}
+                alt={`Poster ${movie.title}`}
+              />
+            ) : (
+              <Poster src={imageReplace} />
+            )}
+            <Content>
+              {movie.releaseDate ? (
+                <h2>
+                  {movie.title} ({movie.releaseDate})
+                </h2>
+              ) : (
+                <h2>{movie.title}</h2>
+              )}
+              <p>User score {movie.voteAverage}%</p>
+              <b>Overview</b>
+              {movie.overview ? (
+                <p>{movie.overview}</p>
+              ) : (
+                <p>Not information</p>
+              )}
+              <b>Genres</b>
+              {movie.genres ? <p>{movie.genres}</p> : <p>Not information</p>}
+            </Content>
+          </Wrapper>
+          <Thumb>
+            <p>Additional information</p>
+            <ul>
+              <li>
+                <Link to="cast" state={location.state}>
+                  Cast
+                </Link>
+              </li>
+              <li>
+                <Link to="reviews" state={location.state}>
+                  Reviews
+                </Link>
+              </li>
+            </ul>
+          </Thumb>
+          <Suspense fallback={<div>JS...</div>}>
+            <Outlet />
+          </Suspense>
+        </>
+      )}
     </>
   );
 };

@@ -2,8 +2,18 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { Form, Input } from './MoviesPage.styled';
 import { fetchSearchMovies } from 'services/Movies.services';
+import { STATUS } from 'constans/Status';
+import Notiflix from 'notiflix';
+
+Notiflix.Notify.init({
+  width: '400px',
+  fontSize: '20px',
+  cssAnimationStyl: 'zoom',
+  position: 'center-center',
+});
 
 const MoviesPage = () => {
+  const [status, setStatus] = useState(STATUS.idle);
   const [searchParams, setSearchParams] = useSearchParams();
   const [movies, setMovies] = useState([]);
   const searchName = searchParams.get('query');
@@ -12,7 +22,9 @@ const MoviesPage = () => {
   const handleSubmit = evt => {
     evt.preventDefault();
     const { value } = evt.target.elements.search;
-
+    if (value === '') {
+      Notiflix.Notify.info('Please, fill in the search field!');
+    }
     setMovies([]);
     setSearchParams({ query: value });
   };
@@ -20,18 +32,32 @@ const MoviesPage = () => {
     if (!searchName) return;
     if (searchName === '') return;
     const getMovies = async () => {
-      const data = await fetchSearchMovies(searchName);
-      onResolve(data);
+      setStatus(STATUS.loading);
+      try {
+        const data = await fetchSearchMovies(searchName);
+        onResolve(data);
+      } catch (error) {
+        console.log(error);
+        setStatus(STATUS.error);
+      }
     };
     getMovies();
   }, [searchName]);
 
   const onResolve = data => {
+    if (data.length === 0) {
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+      setStatus(STATUS.idle);
+      return;
+    }
     const moviesName = data.map(({ id, original_title }) => ({
       id,
       title: original_title,
     }));
     setMovies(moviesName);
+    setStatus(STATUS.success);
   };
 
   return (
@@ -40,7 +66,8 @@ const MoviesPage = () => {
         <Input type="text" autoComplete="off" name="search" />
         <button type="submit">Search</button>
       </Form>
-
+      {status === STATUS.error && <h2>NOT FOUND</h2>}
+      {status === STATUS.loading && <p>Loading...</p>}
       <ul>
         {movies &&
           movies.map(({ id, title }) => (
