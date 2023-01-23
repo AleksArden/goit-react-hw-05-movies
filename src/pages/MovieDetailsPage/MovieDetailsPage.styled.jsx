@@ -39,3 +39,7 @@ export const Load = styled.p`
   margin-left: 24px;
   margin-top: 24px;
 `;
+export const Div = styled.div`
+  margin-top: 16px;
+  margin-left: 24px;
+`;

@@ -17,6 +17,7 @@ import {
   Item,
   Error,
   Load,
+  Div,
 } from './MovieDetailsPage.styled';
 import { IMAGE_URL } from 'constans/ImageURL';
 import { STATUS } from 'constans/Status';
@@ -107,7 +108,7 @@ const MovieDetailsPage = () => {
               </Item>
             </List>
           </Thumb>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Div>Loading...</Div>}>
             <Outlet />
           </Suspense>
         </>
