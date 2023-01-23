@@ -18,7 +18,7 @@ const Layout = () => {
         </nav>
       </Header>
       <main>
-        <Suspense fallback={<div>JS...</div>}>
+        <Suspense fallback={null}>
           <Outlet />
         </Suspense>
       </main>

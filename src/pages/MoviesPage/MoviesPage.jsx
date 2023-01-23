@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
-import { Form, Input } from './MoviesPage.styled';
+import { Form, Input, Item, List, Error, Load } from './MoviesPage.styled';
 import { fetchSearchMovies } from 'services/Movies.services';
 import { STATUS } from 'constans/Status';
 import Notiflix from 'notiflix';
@@ -66,18 +66,18 @@ const MoviesPage = () => {
         <Input type="text" autoComplete="off" name="search" />
         <button type="submit">Search</button>
       </Form>
-      {status === STATUS.error && <h2>NOT FOUND</h2>}
-      {status === STATUS.loading && <p>Loading...</p>}
-      <ul>
+      {status === STATUS.error && <Error>NOT FOUND</Error>}
+      {status === STATUS.loading && <Load>Loading...</Load>}
+      <List>
         {movies &&
           movies.map(({ id, title }) => (
-            <li key={id}>
+            <Item key={id}>
               <Link to={`${id}`} state={{ from: location }}>
                 {title}
               </Link>
-            </li>
+            </Item>
           ))}
-      </ul>
+      </List>
     </div>
   );
 };

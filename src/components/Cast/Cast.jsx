@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { IMAGE_URL } from 'constans/ImageURL';
 import { fetchCastById } from 'services/Movies.services';
 import { STATUS } from 'constans/Status';
+import { Wrapper, List, Item, Thumb, Name } from './Cast.styled';
+import imageReplace from 'assets/poster/poster-not-found.jpg';
 
 const Cast = () => {
   const [cast, setCast] = useState([]);
@@ -36,25 +38,31 @@ const Cast = () => {
     setStatus(STATUS.success);
   };
   return (
-    <>
+    <Wrapper>
       {status === STATUS.error && <h2>NOT FOUND</h2>}
       {status === STATUS.loading && <p>Loading...</p>}
       {status === STATUS.success && cast.length === 0 ? (
         <p>Not information</p>
       ) : (
-        <ul>
+        <List>
           {cast.map(({ id, character, name, image }) => (
-            <li key={id}>
-              {image && (
+            <Item key={id}>
+              {image ? (
                 <img src={`${IMAGE_URL}` + image} alt={name} width="150" />
+              ) : (
+                <img src={imageReplace} alt="Not poster" width="150" />
               )}
-              <p>{name}</p>
-              <p>Character: {character}</p>
-            </li>
+              <Thumb>
+                <Name>{name}</Name>
+                <p>
+                  <b>Character:</b> {character}
+                </p>
+              </Thumb>
+            </Item>
           ))}
-        </ul>
+        </List>
       )}
-    </>
+    </Wrapper>
   );
 };
 export default Cast;

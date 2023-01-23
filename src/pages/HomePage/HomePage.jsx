@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { fetchTrendingMovies } from 'services/Movies.services';
 import TrendingMovies from 'components/TrendingMovies/TrendingMovies';
 import { STATUS } from 'constans/Status';
+import { Wrapper, Title } from './HomePage.styled';
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
@@ -29,21 +30,21 @@ const HomePage = () => {
     setStatus(STATUS.success);
   };
   return (
-    <>
-      {status === STATUS.error && <h2>NOT FOUND</h2>}
+    <Wrapper>
+      {status === STATUS.error && <Title>NOT FOUND</Title>}
       {status === STATUS.loading && (
         <>
-          <h2>Trending today</h2>
+          <Title>Trending today</Title>
           <p>Loading...</p>
         </>
       )}
       {status === STATUS.success && (
         <>
-          <h2>Trending today</h2>
+          <Title>Trending today</Title>
           <TrendingMovies movies={movies} />
         </>
       )}
-    </>
+    </Wrapper>
   );
 };
 export default HomePage;

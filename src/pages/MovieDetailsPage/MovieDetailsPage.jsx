@@ -13,6 +13,10 @@ import {
   Content,
   Thumb,
   Button,
+  List,
+  Item,
+  Error,
+  Load,
 } from './MovieDetailsPage.styled';
 import { IMAGE_URL } from 'constans/ImageURL';
 import { STATUS } from 'constans/Status';
@@ -53,8 +57,8 @@ const MovieDetailsPage = () => {
   };
   return (
     <>
-      {status === STATUS.error && <h2>NOT FOUND</h2>}
-      {status === STATUS.loading && <p>Loading...</p>}
+      {status === STATUS.error && <Error>NOT FOUND</Error>}
+      {status === STATUS.loading && <Load>Loading...</Load>}
       {status === STATUS.success && movie && (
         <>
           <Button type="button" onClick={() => navigate(location?.state?.from)}>
@@ -90,20 +94,20 @@ const MovieDetailsPage = () => {
           </Wrapper>
           <Thumb>
             <p>Additional information</p>
-            <ul>
-              <li>
+            <List>
+              <Item>
                 <Link to="cast" state={location.state}>
                   Cast
                 </Link>
-              </li>
-              <li>
+              </Item>
+              <Item>
                 <Link to="reviews" state={location.state}>
                   Reviews
                 </Link>
-              </li>
-            </ul>
+              </Item>
+            </List>
           </Thumb>
-          <Suspense fallback={<div>JS...</div>}>
+          <Suspense fallback={<div>Loading...</div>}>
             <Outlet />
           </Suspense>
         </>
